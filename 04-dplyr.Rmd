@@ -1,0 +1,337 @@
+# Query data using dplyr
+
+## Select, head, distinct, and order by
+
+```{r dplyr_select, eval=FALSE}
+library(tidyverse)
+library(gapminder)
+
+gapminder %>% 
+  select(country, continent, year, lifeExp, pop) %>% 
+  select(-continent, -lifeExp) %>% 
+  arrange(year, pop) %>% 
+  head(50)
+
+gapminder %>% 
+  distinct(country, continent, pop) %>% 
+  arrange(continent, desc(pop))
+
+```
+
+The select function allows multiple fields can be selected at once. However dplyr also allows the exclusion of columns - using the minus sign as a prefix will return all columns EXCEPT the stated column.
+
+The head function is an equivalent of the SQL TOP statement.
+
+Arrange is the equivalent of order by and defaults to ascending order. Use the desc() function to reverse order to descending.
+
+## Filter
+
+```{r dplyr_filter, eval=FALSE}
+
+gapminder %>% 
+  filter(country == "United Kingdom" & lifeExp >= 75) %>% 
+  filter(year != "1952")
+
+gapminder %>% 
+  filter(country %in% c("Italy", "France", "Spain")) %>% 
+  filter(!is.na(year))
+
+gapminder %>% 
+  filter(!continent %in% c("Europe", "Asia") | lifeExp < 30)
+
+```
+
+The filter function operates much like the SQL WHERE clause.
+
+To identify equality in equations use two equal signs "==".
+
+The & is the AND operator and \| is the OR operator.
+
+The ! character works as an inverse operator (e.g. != is not equal).
+
+Use is.na() to identify null / NA values.
+
+Use %in% to filter for multiple values. Ensure a vector (i.e. wrapped in c()) is used when searching for multiple values.
+
+## Mutate and update
+
+```{r dplyr_mutate, eval = FALSE}
+
+gapminder %>% 
+  mutate(
+    gdp = pop * gdpPercap,
+    row_id = row_number()
+  )
+
+gapminder$year <- as.character(gapminder$year) # converts year from int to character
+
+gapminder %>% 
+  mutate(year = replace(
+    year,
+    year < 1980,
+    "Pre-1980"
+  ))
+
+```
+
+The mutate function allows new columns to be added to the dataset. The name of the new column is given first and then followed by the value of the column (i.e. opposite to sql where the name comes second). The = symbol is equivalent to AS in sql.
+
+The replace statement, combined with mutate, can act as an equivalent of an update statement. It has three arguments: the column being amended, the values to be amended, and the replacement value.
+
+Ensure the datatype of the column allows the replacement values.
+
+## Group by and summarise
+
+```{r dplyr_aggregate, eval = FALSE}
+
+gapminder %>% 
+  group_by(year) %>% 
+  tally()
+
+gapminder %>%
+  group_by(continent, year) %>% 
+  summarise(average_population = mean(pop, na.rm = TRUE))
+
+```
+
+The tally function operates like SUM(1) or COUNT(\*) in SQL.
+
+The summarise function allows mathematical operations over groups such as sum, mean, median etc. If there are any nulls / NA values in the data, ensure that the sum / mean functions have the na.rm argument set to TRUE.
+
+It is good practice to ungroup following aggregation to ensure grouping does not unintentionally impact on further steps in data manipulation.
+
+## Joins and unions
+
+```{r dplyr_joins, eval = FALSE}
+
+gapminder %>% 
+  left_join(country_codes, "country") # join condition if column name same
+
+gapminder %>% 
+  inner_join(country_codes, c("country" = "country")) # join condition if column names differ
+
+gapminder %>%
+  filter(year == 1957) %>% 
+  union_all(
+    gapminder %>%
+      filter(year == 1962)
+  ) %>% 
+  union_all(
+    gapminder %>%
+      filter(year == 1967)
+  )
+
+```
+
+If the joining column names are the same, the column only needs to be referenced once. If the names are different, both column names need to be specified.
+
+## Case When
+
+```{r dplyr_casewhen, eval = FALSE}
+
+gapminder %>% 
+  distinct(continent) %>% 
+  mutate(continent_id = case_when(
+    continent == "Africa" ~ 1,
+    continent == "Asia" ~ 2,
+    TRUE ~ 3
+  ))
+ 
+```
+
+The case when statement operates like SQL with slightly different syntax.
+
+The tilde symbol is an equivalent of THEN.
+
+TRUE is the equivalent of the concluding ELSE statement.
+
+## Pivot
+
+```{r dplyr_pivot, eval = FALSE}
+
+life_expectancy <-
+  gapminder %>% 
+  select(country, year, lifeExp)
+
+life_expectancy %>% 
+  pivot_wider(
+    names_from = year,
+    values_from = lifeExp
+  )
+
+```
+
+```{r dplyr_pivot_table, include=TRUE, warning = FALSE, message=FALSE, echo = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(gapminder)
+library(DT)
+
+# Outputs table
+
+life_expectancy <-
+  gapminder %>% 
+  select(country, year, lifeExp) %>% 
+  pivot_wider(
+    names_from = year,
+    values_from = lifeExp
+  )
+
+datatable(
+  life_expectancy,
+  rownames = FALSE,
+  options = list(
+    scrollX = TRUE,
+    dom = "tp",
+    pageLength = 10
+  )
+)
+
+```
+
+Use pivot_wider to pivot rows to columns. The above output pivots years to columns to show a tabular view of life expectancy over time.
+
+## Unpivot
+
+```{r dplyr_unpivot, eval = FALSE}
+
+# Identify columns to unpivot
+metric_list <-
+  colnames(gapminder) %>% 
+  as_tibble() %>% 
+  filter(value %in% c("lifeExp","pop","gdpPercap")) %>% # list pivoting columns
+  .$value # retrieve values as vector
+
+# Pivot
+gapminder %>% 
+  pivot_longer(
+    cols = all_of(metric_list), # cols to pivot - all_of helper function needed
+    names_to = "Metric",
+    values_to = "Value"
+  )
+
+```
+
+```{r dplyr_unpivot_table, include=TRUE, warning = FALSE, message=FALSE, echo = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Outputs table
+
+metric_list <-
+  colnames(gapminder) %>% 
+  as_tibble() %>% 
+  filter(value %in% c("lifeExp","pop","gdpPercap")) %>% # list pivoting columns
+  .$value # retrieve values as vector
+
+output <- 
+  gapminder %>% 
+  pivot_longer(
+    cols = all_of(metric_list), # cols to pivot - all_of helper function needed
+    names_to = "Metric",
+    values_to = "Value"
+  )
+
+datatable(
+  output,
+  rownames = FALSE,
+  options = list(
+    scrollX = TRUE,
+    dom = "tp",
+    pageLength = 10
+  )
+)
+
+```
+
+Use the pivot_longer function to unpivot columns to rows. It requires a vector of columns to pivot. Use the above method to hard code the column names.
+
+Alternatively, if there is a pattern in the name of columns to pivot (i.e. all include a number), you can use stringr and regular expressions.
+
+-   E.g. colnames(data) %\>% sub_set("\\\\d") identifies all columns containing a number
+
+-   Regular expression guide with stringr found here <https://evoldyn.gitlab.io/evomics-2018/ref-sheets/R_strings.pdf>).
+
+## Across
+
+```{r dplyr_across, eval = FALSE}
+
+# Calculate max length
+gapminder %>% 
+  summarise(
+    across(
+      everything(),
+      ~max(str_length(.), na.rm = TRUE)
+    )
+  ) %>% 
+  pivot_longer(cols = everything())
+
+# Update null values with zero
+gapminder %>% 
+  mutate(
+    across(
+      everything(),
+      ~ replace(., is.na(.), 0)
+    )
+  )
+ 
+```
+
+Use across to apply logic to multiple columns in a dataset. The two above examples look at:
+
+-   Calculating max length of all columns
+
+-   Updating all null values with zeros
+
+Across takes two key arguments:
+
+-   The first to choose which columns to apply logic to
+
+-   The second to outline the logic to apply.
+
+For the first argument, helper functions are useful here - everything() will select all columns. Other examples can be found here - <https://tidyselect.r-lib.org/reference/language.html>
+
+For the second argument, use a full stop (.) in place of a column name to pass through all columns that meet the criteria of the first argument. Ensure that a tilde (\~) preceding the function used in the logic is also included.
+
+## Across to retrieve datatypes
+
+```{r dplyr_across_datatypes, eval = FALSE}
+
+# Calculate max length no dates
+gapminder %>%
+  summarise(
+    across(
+      everything(),
+      ~max(str_length(.), na.rm = TRUE)
+    )
+  ) %>%
+  view()
+  pivot_longer(cols = everything(), values_to = "max_length") %>%
+  left_join(
+    gapminder %>%
+      sapply(class) %>% # extract datatype from all cols
+      as_tibble(rownames = "name") %>%
+      rename(data_type = value),
+    "name"
+  ) %>%
+  print(n = ncol(gapminder))
+  
+# Calculate max length with dates
+gapminder %>%
+  summarise(
+    across(
+      everything(),
+      ~max(str_length(.), na.rm = TRUE)
+    )
+  ) %>%
+  pivot_longer(cols = everything()) %>%
+  left_join(
+    sapply(gapminder, class) %>%
+      as_tibble() %>%
+      head(1) %>% # dates can have two classes - pick only one
+      pivot_longer(cols = everything(), values_to = "data_type"),
+    "name"
+  ) %>%
+  print(n = ncol(gapminder))
+ 
+```

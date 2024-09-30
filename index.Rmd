@@ -1,0 +1,88 @@
+--- 
+title: "BSOL R Guide"
+author: "Archie Atack"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: [book.bib, packages.bib]
+description: |
+  This is a code guide for R and R packages.
+link-citations: yes
+github-repo: rstudio/bookdown-demo
+---
+
+# Loading data from file
+
+## Read from CSV
+
+```{r csv, eval=FALSE}
+library(tidyverse)
+csv_data <- read_csv("data.csv")
+```
+
+read_csv() is found in the readr package (part of tidyverse) and is an improved version of the base R function read.csv().
+
+```{r csv_data, eval = FALSE}
+csv_data <- read_csv(
+  "data.csv",
+  col_types = cols( # specify data types
+    col1 = col_character(),
+    col2 = col_double(),
+    col3 = col_date(),
+    col4 = col_datetime(),
+    col5 = col_time(),
+    col6 = col_logical()
+  )
+)
+```
+
+Use the col_types argument to specify data types. See the documentation for cols() to see the possible types.
+
+If the col_types argument is left blank, read_csv estimates an appropriate data type for each column using the first 1000 rows of data. Amend the guess_max argument to adjust the number of rows used to estimate type.
+
+Use col_types = cols() to suppress the output message to the console.
+
+Use cols_only instead of cols() to only specify the data types of a subset of the columns. 
+
+## Read from excel
+
+```{r excel, eval=FALSE}
+library(readxl)
+excel_data <- read_xlsx("data.xlsx")
+
+```
+
+readxl is downloaded as part of the tidyverse packages but needs to be called specifically to load in its functions.
+
+By default, readxl will load in the first sheet of the workbook.
+
+To read in xls files, use either read_excel() or read_xls().
+
+```{r excel_read, eval=FALSE}
+excel_data <- read_xlsx(
+  "data.xlsx",
+  sheet = "Sheet1",
+  range = "A1:D20"
+)
+
+excel_data <- read_xlsx(
+  "data.xlsx",
+  sheet = "Sheet1",
+  skip = 3,
+  n_max = 100
+)
+```
+
+Use the sheet, range, skip, n_max etc arguments to specify the range of data to read. 
+
+```{r excel_data, eval=FALSE}
+excel_data <- read_xlsx(
+  "data.xlsx",
+  sheet = "Sheet1",
+  range = "A1:D20",
+  col_types = c("text","numeric","date","guess")
+)
+
+```
+
+Use the col_types argument to specify data types. See the documentation for list of all possible types.

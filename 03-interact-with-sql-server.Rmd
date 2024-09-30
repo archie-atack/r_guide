@@ -1,0 +1,115 @@
+# Interact with SQL Server
+
+## SQL connection
+
+```{r conn, eval=FALSE}
+library(odbc)
+sql_connection <-
+  dbConnect(
+    odbc(),
+    Driver = "SQL Server",
+    Server = "MLCSU-BI-SQL",
+    Database = "EAT_Reporting_BSOL",
+    Trusted_Connection = "True"
+  )
+```
+
+odbc is a package that allows R to connect to the SQL server databases.
+
+## Read data using SQL
+
+```{r select, eval=FALSE}
+library(DBI)
+library(tidyverse)
+sql_data <- 
+  dbGetQuery(
+    sql_connection,
+    "SELECT *
+    FROM table"
+  ) %>% as_tibble() # converts output to tibble for practicality
+```
+
+The DBI package allows R to interact with the data in SQL server.
+
+The dbGetQuery() function outputs the data as a dataframe. Therefore the dataframe is then converted to a tibble using as_tibble() for practicality (tibbles print tidier outputs to the console). 
+
+## Read data using existing script
+
+```{r sql_embed, eval=FALSE}
+sql_data <- 
+  dbGetQuery(
+    sql_connection,
+    readr::read_file("script.sql")
+  ) %>% as_tibble()
+```
+
+The read_file() function from readr allows an existing SQL script in the file directory to be run from RStudio and will load the results of the query into R. 
+
+## Execute SQL from R
+
+```{r sql_sp, eval=FALSE}
+dbExecute(
+  sql_connection,
+  "SELECT *
+  INTO ##temp
+  FROM table"
+)
+```
+
+Use this when creating temp tables in SQL server or running stored procedures from R.
+
+## Create static table
+
+```{r sql_static, eval=FALSE}
+dbWriteTable(
+  sql_connection,
+  Id(schema = "dbo", table = "BSOL_XXXX_example"),
+  data,
+  overwrite = TRUE,
+  field.types = c(
+    col1 = "varchar(50)",
+    col2 = "int",
+    col3 = "date"
+  )
+)
+```
+
+The dbWriteTable() function can be used to create tables in SQL Server from R.
+
+To specify the naming convention of the table to be made, the below functions can be used:
+- Database name: the database specified in the original sql_connection using dbConnect()
+- Schema and table name: the Id() function is used to specify the schema and table name
+
+If the schema is not specified using the Id function, R will use the default schema for that database (usually dbo).
+
+Use the overwrite argument to enable overwrites of the table.
+
+Use the field.types argument to specify the data types to applied to each column when loading the data into R. If the field.types are not specified, SQL will estimate an appropriate data type to use - !warning! sql will use varchar(255) for all character columns, therefore it is recommended that data types are specified for larger tables.
+
+## Create temp table
+
+```{r sql_temp, eval=FALSE}
+dbWriteTable(
+  sql_connection,
+  "##BSOL_XXXX_example",
+  data
+)
+```
+
+To create a temp table, the schema and database do not have to be specified.
+
+## Delete tables 
+
+```{r sql_remove, eval=FALSE}
+dbRemoveTable(
+  sql_connection,
+  Id(schema = "dbo", table = "BSOL_XXXX_example")
+)
+dbRemoveTable(sql_connection, "##BSOL_XXXX_example")
+```
+
+The dbRemoveTable() function can be used to remove tables from SQL server.
+
+To remove static tables, the database needs to be specified via the sql connection and the schema must also be defined.
+
+To remove temp tables, the database and schema do not need to be specified.

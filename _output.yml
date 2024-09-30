@@ -1,0 +1,9 @@
+bookdown::gitbook:
+  css: style.css
+  config:
+    sharing:
+      facebook: false
+      twitter: false
+    toc:
+      before: |
+        <li><a href="./">BSOL R Guide</a></li>

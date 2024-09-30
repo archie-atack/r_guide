@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 6 Creating charts | BSOL R Guide</title>
+  <meta name="description" content="This is a code guide for R and R packages." />
+  <meta name="generator" content="bookdown 0.35 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 6 Creating charts | BSOL R Guide" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="This is a code guide for R and R packages." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 6 Creating charts | BSOL R Guide" />
+  
+  <meta name="twitter:description" content="This is a code guide for R and R packages." />
+  
+
+<meta name="author" content="Archie Atack" />
+
+
+<meta name="date" content="2024-09-30" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="string-functions.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.28/datatables.js"></script>
+<link href="libs/dt-core-1.13.4/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.13.4/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.13.4/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
+<script src="libs/plotly-binding-4.10.4/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">BSOL R Guide</a></li>
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Loading data from file</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#read-from-csv"><i class="fa fa-check"></i><b>1.1</b> Read from CSV</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#read-from-excel"><i class="fa fa-check"></i><b>1.2</b> Read from excel</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="writing-data-to-file.html"><a href="writing-data-to-file.html"><i class="fa fa-check"></i><b>2</b> Writing data to file</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="writing-data-to-file.html"><a href="writing-data-to-file.html#write-to-csv"><i class="fa fa-check"></i><b>2.1</b> Write to CSV</a></li>
+<li class="chapter" data-level="2.2" data-path="writing-data-to-file.html"><a href="writing-data-to-file.html#write-to-excel"><i class="fa fa-check"></i><b>2.2</b> Write to excel</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="interact-with-sql-server.html"><a href="interact-with-sql-server.html"><i class="fa fa-check"></i><b>3</b> Interact with SQL Server</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="interact-with-sql-server.html"><a href="interact-with-sql-server.html#sql-connection"><i class="fa fa-check"></i><b>3.1</b> SQL connection</a></li>
+<li class="chapter" data-level="3.2" data-path="interact-with-sql-server.html"><a href="interact-with-sql-server.html#read-data-using-sql"><i class="fa fa-check"></i><b>3.2</b> Read data using SQL</a></li>
+<li class="chapter" data-level="3.3" data-path="interact-with-sql-server.html"><a href="interact-with-sql-server.html#read-data-using-existing-script"><i class="fa fa-check"></i><b>3.3</b> Read data using existing script</a></li>
+<li class="chapter" data-level="3.4" data-path="interact-with-sql-server.html"><a href="interact-with-sql-server.html#execute-sql-from-r"><i class="fa fa-check"></i><b>3.4</b> Execute SQL from R</a></li>
+<li class="chapter" data-level="3.5" data-path="interact-with-sql-server.html"><a href="interact-with-sql-server.html#create-static-table"><i class="fa fa-check"></i><b>3.5</b> Create static table</a></li>
+<li class="chapter" data-level="3.6" data-path="interact-with-sql-server.html"><a href="interact-with-sql-server.html#create-temp-table"><i class="fa fa-check"></i><b>3.6</b> Create temp table</a></li>
+<li class="chapter" data-level="3.7" data-path="interact-with-sql-server.html"><a href="interact-with-sql-server.html#delete-tables"><i class="fa fa-check"></i><b>3.7</b> Delete tables</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="query-data-using-dplyr.html"><a href="query-data-using-dplyr.html"><i class="fa fa-check"></i><b>4</b> Query data using dplyr</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="query-data-using-dplyr.html"><a href="query-data-using-dplyr.html#select-head-distinct-and-order-by"><i class="fa fa-check"></i><b>4.1</b> Select, head, distinct, and order by</a></li>
+<li class="chapter" data-level="4.2" data-path="query-data-using-dplyr.html"><a href="query-data-using-dplyr.html#filter"><i class="fa fa-check"></i><b>4.2</b> Filter</a></li>
+<li class="chapter" data-level="4.3" data-path="query-data-using-dplyr.html"><a href="query-data-using-dplyr.html#mutate-and-update"><i class="fa fa-check"></i><b>4.3</b> Mutate and update</a></li>
+<li class="chapter" data-level="4.4" data-path="query-data-using-dplyr.html"><a href="query-data-using-dplyr.html#group-by-and-summarise"><i class="fa fa-check"></i><b>4.4</b> Group by and summarise</a></li>
+<li class="chapter" data-level="4.5" data-path="query-data-using-dplyr.html"><a href="query-data-using-dplyr.html#joins-and-unions"><i class="fa fa-check"></i><b>4.5</b> Joins and unions</a></li>
+<li class="chapter" data-level="4.6" data-path="query-data-using-dplyr.html"><a href="query-data-using-dplyr.html#case-when"><i class="fa fa-check"></i><b>4.6</b> Case When</a></li>
+<li class="chapter" data-level="4.7" data-path="query-data-using-dplyr.html"><a href="query-data-using-dplyr.html#pivot"><i class="fa fa-check"></i><b>4.7</b> Pivot</a></li>
+<li class="chapter" data-level="4.8" data-path="query-data-using-dplyr.html"><a href="query-data-using-dplyr.html#unpivot"><i class="fa fa-check"></i><b>4.8</b> Unpivot</a></li>
+<li class="chapter" data-level="4.9" data-path="query-data-using-dplyr.html"><a href="query-data-using-dplyr.html#across"><i class="fa fa-check"></i><b>4.9</b> Across</a></li>
+<li class="chapter" data-level="4.10" data-path="query-data-using-dplyr.html"><a href="query-data-using-dplyr.html#across-to-retrieve-datatypes"><i class="fa fa-check"></i><b>4.10</b> Across to retrieve datatypes</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="string-functions.html"><a href="string-functions.html"><i class="fa fa-check"></i><b>5</b> String functions</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="string-functions.html"><a href="string-functions.html#stringr"><i class="fa fa-check"></i><b>5.1</b> Stringr</a></li>
+<li class="chapter" data-level="5.2" data-path="string-functions.html"><a href="string-functions.html#example-functions"><i class="fa fa-check"></i><b>5.2</b> Example functions</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="creating-charts.html"><a href="creating-charts.html"><i class="fa fa-check"></i><b>6</b> Creating charts</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="creating-charts.html"><a href="creating-charts.html#ggplot2"><i class="fa fa-check"></i><b>6.1</b> ggplot2</a></li>
+<li class="chapter" data-level="6.2" data-path="creating-charts.html"><a href="creating-charts.html#bar-chart"><i class="fa fa-check"></i><b>6.2</b> Bar chart</a></li>
+<li class="chapter" data-level="6.3" data-path="creating-charts.html"><a href="creating-charts.html#chart-customisation"><i class="fa fa-check"></i><b>6.3</b> Chart customisation</a></li>
+<li class="chapter" data-level="6.4" data-path="creating-charts.html"><a href="creating-charts.html#combining-chart-elements"><i class="fa fa-check"></i><b>6.4</b> Combining chart elements</a></li>
+<li class="chapter" data-level="6.5" data-path="creating-charts.html"><a href="creating-charts.html#interactive-charts"><i class="fa fa-check"></i><b>6.5</b> Interactive charts</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">BSOL R Guide</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="creating-charts" class="section level1 hasAnchor" number="6">
+<h1><span class="header-section-number">Chapter 6</span> Creating charts<a href="creating-charts.html#creating-charts" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="ggplot2" class="section level2 hasAnchor" number="6.1">
+<h2><span class="header-section-number">6.1</span> ggplot2<a href="creating-charts.html#ggplot2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The ggplot2 package, part of the tidyverse collection, is the most popular package in R to create charts.</p>
+<p>The below dataset of BSOL PCN populations (derived from NHS Digital - Patients Registered at a GP Practice dataset) is used in the following examples.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="creating-charts.html#cb27-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb27-2"><a href="creating-charts.html#cb27-2" tabindex="-1"></a>pcn <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;ggplot2_pcn_pop.csv&quot;</span>)</span></code></pre></div>
+<div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-8c754f96ace5c7cf2498" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-8c754f96ace5c7cf2498">{"x":{"filter":"none","vertical":false,"data":[["Alliance of Sutton Practices","Balsall Heath, Sparkhill and Moseley","Birmingham East Central","Bordesley East","Bournville and Northfield","Community Care Hall Green","Edgbaston","GOSK","GPS Healthcare","Harborne","Kingstanding, Erdington and Nechells","MMP Central and North","Moseley, Billesley and Yardley Wood","Nechells, Saltley and Alum Rock","North Birmingham","North Solihull","Pershore","Quinton and Harborne","Shard End and Kitts Green","Small Heath","Smartcare Central","Solihull Healthcare Partnership","Solihull Rural","Solihull South Central","South Birmingham Alliance","Sutton Group Practice","SWB Caritas","Washwood Heath","Weoley and Rubery","West Birmingham"],[43229,41921,49647,32094,46978,47178,36446,27764,40033,57365,55184,60201,43084,37869,37528,81144,40105,38201,48915,37920,64845,55900,32307,29529,72920,53418,11975,54734,44074,28590],["Group 2","Group 2","Group 2","Group 3","Group 2","Group 2","Group 3","Group 3","Group 2","Group 2","Group 2","Group 1","Group 2","Group 3","Group 3","Group 1","Group 2","Group 3","Group 2","Group 3","Group 1","Group 2","Group 3","Group 3","Group 1","Group 2","Group 4","Group 2","Group 2","Group 3"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>PCN<\/th>\n      <th>Population<\/th>\n      <th>Group<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"pt","pageLength":10,"columnDefs":[{"className":"dt-right","targets":1}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="bar-chart" class="section level2 hasAnchor" number="6.2">
+<h2><span class="header-section-number">6.2</span> Bar chart<a href="creating-charts.html#bar-chart" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="creating-charts.html#cb28-1" tabindex="-1"></a><span class="fu">ggplot</span>(</span>
+<span id="cb28-2"><a href="creating-charts.html#cb28-2" tabindex="-1"></a>  pcn, <span class="co"># data</span></span>
+<span id="cb28-3"><a href="creating-charts.html#cb28-3" tabindex="-1"></a>  <span class="fu">aes</span>(PCN, Population) <span class="co"># x + y values</span></span>
+<span id="cb28-4"><a href="creating-charts.html#cb28-4" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb28-5"><a href="creating-charts.html#cb28-5" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">&quot;lightgreen&quot;</span>) <span class="sc">+</span></span>
+<span id="cb28-6"><a href="creating-charts.html#cb28-6" tabindex="-1"></a>  <span class="fu">coord_flip</span>()</span></code></pre></div>
+<p><img src="_main_files/figure-html/ggplot2_col-1.png" width="672" /></p>
+<p>The ggplot function begins the chart - this takes the dataset and the variables to be plotted on the x + y axis. The x + y variables have to be wrapped within the aes (aesthetic) function.</p>
+<p>Please note that because ggplot2 was one of the first designed tidyverse packages, it does not currently operate with the pipe. Instead it uses the + sign, which works in a similar fashion to the pipe.</p>
+<p>To specify the type of chart, a geom_ function is required - geom_col in this case. Use the fill argument to change the colour of the columns - by default it will be grey.</p>
+<p>As there are a large number of PCN labels for the x-axis, the labels will overlap. Therefore the coord_flip() function is used to flip PCN to the x-axis and enable the labels to be readable.</p>
+</div>
+<div id="chart-customisation" class="section level2 hasAnchor" number="6.3">
+<h2><span class="header-section-number">6.3</span> Chart customisation<a href="creating-charts.html#chart-customisation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="creating-charts.html#cb29-1" tabindex="-1"></a><span class="fu">ggplot</span>(</span>
+<span id="cb29-2"><a href="creating-charts.html#cb29-2" tabindex="-1"></a>  pcn,</span>
+<span id="cb29-3"><a href="creating-charts.html#cb29-3" tabindex="-1"></a>  <span class="fu">aes</span>(</span>
+<span id="cb29-4"><a href="creating-charts.html#cb29-4" tabindex="-1"></a>    <span class="fu">reorder</span>(PCN, Population), <span class="co"># order PCN by population</span></span>
+<span id="cb29-5"><a href="creating-charts.html#cb29-5" tabindex="-1"></a>    Population</span>
+<span id="cb29-6"><a href="creating-charts.html#cb29-6" tabindex="-1"></a>  ) </span>
+<span id="cb29-7"><a href="creating-charts.html#cb29-7" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb29-8"><a href="creating-charts.html#cb29-8" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">&quot;lightgreen&quot;</span>) <span class="sc">+</span></span>
+<span id="cb29-9"><a href="creating-charts.html#cb29-9" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb29-10"><a href="creating-charts.html#cb29-10" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;PCN&quot;</span>) <span class="sc">+</span> <span class="co"># rename PCN axis</span></span>
+<span id="cb29-11"><a href="creating-charts.html#cb29-11" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="co"># remove space</span></span></code></pre></div>
+<p><img src="_main_files/figure-html/ggplot2_col2-1.png" width="672" /></p>
+<p>ggplot2 allows significant chart customisation, the above code includes a few examples:</p>
+<p>Use the reorder function when the x + y variables are called to order the columns.</p>
+<p>Use the xlab or ylab functions to rename each axis. When the reorder function is used, the axis will be renamed reorder(x,y) - the xlab function allows this to be corrected.</p>
+<p>Use the code scale_y_continuous(expand = c(0,0)) to remove the space between the PCN labels and the columns.</p>
+</div>
+<div id="combining-chart-elements" class="section level2 hasAnchor" number="6.4">
+<h2><span class="header-section-number">6.4</span> Combining chart elements<a href="creating-charts.html#combining-chart-elements" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="creating-charts.html#cb30-1" tabindex="-1"></a>average_pop <span class="ot">&lt;-</span> <span class="fu">mean</span>(pcn<span class="sc">$</span>Population)</span>
+<span id="cb30-2"><a href="creating-charts.html#cb30-2" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="creating-charts.html#cb30-3" tabindex="-1"></a><span class="fu">ggplot</span>(</span>
+<span id="cb30-4"><a href="creating-charts.html#cb30-4" tabindex="-1"></a>  pcn,</span>
+<span id="cb30-5"><a href="creating-charts.html#cb30-5" tabindex="-1"></a>  <span class="fu">aes</span>(</span>
+<span id="cb30-6"><a href="creating-charts.html#cb30-6" tabindex="-1"></a>    <span class="fu">reorder</span>(PCN, Population), </span>
+<span id="cb30-7"><a href="creating-charts.html#cb30-7" tabindex="-1"></a>    Population</span>
+<span id="cb30-8"><a href="creating-charts.html#cb30-8" tabindex="-1"></a>  ) </span>
+<span id="cb30-9"><a href="creating-charts.html#cb30-9" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb30-10"><a href="creating-charts.html#cb30-10" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">&quot;lightgreen&quot;</span>) <span class="sc">+</span></span>
+<span id="cb30-11"><a href="creating-charts.html#cb30-11" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb30-12"><a href="creating-charts.html#cb30-12" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;PCN&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb30-13"><a href="creating-charts.html#cb30-13" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> average_pop, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span> <span class="co"># avg population</span></span>
+<span id="cb30-14"><a href="creating-charts.html#cb30-14" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) </span></code></pre></div>
+<p><img src="_main_files/figure-html/ggplot2_avg-1.png" width="672" /></p>
+<p>Multiple elements can be added to the chart. The above code adds a benchmark line to indicate average PCN population.</p>
+<p>The average population can be derived and then passed through to the geom_hline function to indicate the PCN average.</p>
+</div>
+<div id="interactive-charts" class="section level2 hasAnchor" number="6.5">
+<h2><span class="header-section-number">6.5</span> Interactive charts<a href="creating-charts.html#interactive-charts" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="creating-charts.html#cb31-1" tabindex="-1"></a><span class="fu">library</span>(plotly)</span>
+<span id="cb31-2"><a href="creating-charts.html#cb31-2" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="creating-charts.html#cb31-3" tabindex="-1"></a><span class="fu">ggplotly</span>(</span>
+<span id="cb31-4"><a href="creating-charts.html#cb31-4" tabindex="-1"></a>  <span class="fu">ggplot</span>(</span>
+<span id="cb31-5"><a href="creating-charts.html#cb31-5" tabindex="-1"></a>    pcn,</span>
+<span id="cb31-6"><a href="creating-charts.html#cb31-6" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb31-7"><a href="creating-charts.html#cb31-7" tabindex="-1"></a>      <span class="fu">reorder</span>(PCN, Population),</span>
+<span id="cb31-8"><a href="creating-charts.html#cb31-8" tabindex="-1"></a>      Population,</span>
+<span id="cb31-9"><a href="creating-charts.html#cb31-9" tabindex="-1"></a>      <span class="at">text =</span> <span class="fu">paste0</span>( <span class="co"># customisable tooltip using html</span></span>
+<span id="cb31-10"><a href="creating-charts.html#cb31-10" tabindex="-1"></a>        <span class="st">&quot;PCN: &quot;</span>, PCN,</span>
+<span id="cb31-11"><a href="creating-charts.html#cb31-11" tabindex="-1"></a>        <span class="st">&quot;&lt;br&gt;&quot;</span>,</span>
+<span id="cb31-12"><a href="creating-charts.html#cb31-12" tabindex="-1"></a>        <span class="st">&quot;Population: &quot;</span>, Population,</span>
+<span id="cb31-13"><a href="creating-charts.html#cb31-13" tabindex="-1"></a>        <span class="st">&quot;&lt;br&gt;&quot;</span>,</span>
+<span id="cb31-14"><a href="creating-charts.html#cb31-14" tabindex="-1"></a>        Group</span>
+<span id="cb31-15"><a href="creating-charts.html#cb31-15" tabindex="-1"></a>      )</span>
+<span id="cb31-16"><a href="creating-charts.html#cb31-16" tabindex="-1"></a>    )</span>
+<span id="cb31-17"><a href="creating-charts.html#cb31-17" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb31-18"><a href="creating-charts.html#cb31-18" tabindex="-1"></a>    <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">&quot;lightgreen&quot;</span>) <span class="sc">+</span></span>
+<span id="cb31-19"><a href="creating-charts.html#cb31-19" tabindex="-1"></a>    <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb31-20"><a href="creating-charts.html#cb31-20" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">&quot;PCN&quot;</span>) <span class="sc">+</span></span>
+<span id="cb31-21"><a href="creating-charts.html#cb31-21" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> average_pop, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb31-22"><a href="creating-charts.html#cb31-22" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)),</span>
+<span id="cb31-23"><a href="creating-charts.html#cb31-23" tabindex="-1"></a>  <span class="at">tooltip =</span> <span class="st">&quot;text&quot;</span> <span class="co"># ensures tooltip is changed</span></span>
+<span id="cb31-24"><a href="creating-charts.html#cb31-24" tabindex="-1"></a>) <span class="sc">%&gt;%</span> <span class="fu">config</span>(<span class="at">displayModeBar =</span> F)</span></code></pre></div>
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-bd9486537287c4119bf1" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-bd9486537287c4119bf1">{"x":{"data":[{"orientation":"h","width":[0.89999999999999858,0.89999999999999858,0.89999999999999858,0.90000000000000036,0.89999999999999858,0.89999999999999858,0.90000000000000036,0.90000000000000013,0.89999999999999858,0.89999999999999858,0.89999999999999858,0.89999999999999858,0.89999999999999858,0.89999999999999858,0.89999999999999947,0.89999999999999858,0.89999999999999858,0.89999999999999858,0.89999999999999858,0.89999999999999858,0.89999999999999858,0.89999999999999858,0.90000000000000036,0.90000000000000036,0.89999999999999858,0.89999999999999858,0.89999999999999991,0.89999999999999858,0.89999999999999858,0.90000000000000036],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[43229,41921,49647,32094,46978,47178,36446,27764,40033,57365,55184,60201,43084,37869,37528,81144,40105,38201,48915,37920,64845,55900,32307,29529,72920,53418,11975,54734,44074,28590],"y":[16,14,21,5,18,19,7,2,12,26,24,27,15,9,8,30,13,11,20,10,28,25,6,4,29,22,1,23,17,3],"text":["PCN: Alliance of Sutton Practices<br>Population: 43229<br>Group 2","PCN: Balsall Heath, Sparkhill and Moseley<br>Population: 41921<br>Group 2","PCN: Birmingham East Central<br>Population: 49647<br>Group 2","PCN: Bordesley East<br>Population: 32094<br>Group 3","PCN: Bournville and Northfield<br>Population: 46978<br>Group 2","PCN: Community Care Hall Green<br>Population: 47178<br>Group 2","PCN: Edgbaston<br>Population: 36446<br>Group 3","PCN: GOSK<br>Population: 27764<br>Group 3","PCN: GPS Healthcare<br>Population: 40033<br>Group 2","PCN: Harborne<br>Population: 57365<br>Group 2","PCN: Kingstanding, Erdington and Nechells<br>Population: 55184<br>Group 2","PCN: MMP Central and North<br>Population: 60201<br>Group 1","PCN: Moseley, Billesley and Yardley Wood<br>Population: 43084<br>Group 2","PCN: Nechells, Saltley and Alum Rock<br>Population: 37869<br>Group 3","PCN: North Birmingham<br>Population: 37528<br>Group 3","PCN: North Solihull<br>Population: 81144<br>Group 1","PCN: Pershore<br>Population: 40105<br>Group 2","PCN: Quinton and Harborne<br>Population: 38201<br>Group 3","PCN: Shard End and Kitts Green<br>Population: 48915<br>Group 2","PCN: Small Heath<br>Population: 37920<br>Group 3","PCN: Smartcare Central<br>Population: 64845<br>Group 1","PCN: Solihull Healthcare Partnership<br>Population: 55900<br>Group 2","PCN: Solihull Rural<br>Population: 32307<br>Group 3","PCN: Solihull South Central<br>Population: 29529<br>Group 3","PCN: South Birmingham Alliance<br>Population: 72920<br>Group 1","PCN: Sutton Group Practice<br>Population: 53418<br>Group 2","PCN: SWB Caritas<br>Population: 11975<br>Group 4","PCN: Washwood Heath<br>Population: 54734<br>Group 2","PCN: Weoley and Rubery<br>Population: 44074<br>Group 2","PCN: West Birmingham<br>Population: 28590<br>Group 3"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(144,238,144,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[45036.599999999999,45036.599999999999],"y":[0.40000000000000002,30.600000000000001],"text":"","type":"scatter","mode":"lines","line":{"width":1.8897637795275593,"color":"rgba(0,0,255,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":26.228310502283104,"r":7.3059360730593621,"b":40.182648401826491,"l":235.98173515981739},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0,81144],"tickmode":"array","ticktext":["0","20000","40000","60000","80000"],"tickvals":[0,20000,40000,60000,80000],"categoryorder":"array","categoryarray":["0","20000","40000","60000","80000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Population","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.40000000000000002,30.600000000000001],"tickmode":"array","ticktext":["SWB Caritas","GOSK","West Birmingham","Solihull South Central","Bordesley East","Solihull Rural","Edgbaston","North Birmingham","Nechells, Saltley and Alum Rock","Small Heath","Quinton and Harborne","GPS Healthcare","Pershore","Balsall Heath, Sparkhill and Moseley","Moseley, Billesley and Yardley Wood","Alliance of Sutton Practices","Weoley and Rubery","Bournville and Northfield","Community Care Hall Green","Shard End and Kitts Green","Birmingham East Central","Sutton Group Practice","Washwood Heath","Kingstanding, Erdington and Nechells","Solihull Healthcare Partnership","Harborne","MMP Central and North","Smartcare Central","South Birmingham Alliance","North Solihull"],"tickvals":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],"categoryorder":"array","categoryarray":["SWB Caritas","GOSK","West Birmingham","Solihull South Central","Bordesley East","Solihull Rural","Edgbaston","North Birmingham","Nechells, Saltley and Alum Rock","Small Heath","Quinton and Harborne","GPS Healthcare","Pershore","Balsall Heath, Sparkhill and Moseley","Moseley, Billesley and Yardley Wood","Alliance of Sutton Practices","Weoley and Rubery","Bournville and Northfield","Community Care Hall Green","Shard End and Kitts Green","Birmingham East Central","Sutton Group Practice","Washwood Heath","Kingstanding, Erdington and Nechells","Solihull Healthcare Partnership","Harborne","MMP Central and North","Smartcare Central","South Birmingham Alliance","North Solihull"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"PCN","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"source":"A","attrs":{"619c25274e1d":{"x":{},"y":{},"text":{},"type":"bar"},"619c43995db7":{"yintercept":{}}},"cur_data":"619c25274e1d","visdat":{"619c25274e1d":["function (y) ","x"],"619c43995db7":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p>The plotly package converts ggplot2 plots to interactive charts. Simply wrap the existing ggplot2 code in the ggplotly function.</p>
+<p>To edit the tooltip, edit the text argument within the aes() function. This can take html for formatting. Ensure tooltip = “text” is included at the end of the ggplotly function.</p>
+<p>To turn off the option buttons created by plotly, use %&gt;% config(displayModeBar = F).</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="string-functions.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": false,
+"twitter": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

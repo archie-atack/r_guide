@@ -1,0 +1,25 @@
+# Writing data to file
+
+## Write to CSV
+
+```{r csv_write, eval=FALSE}
+library(tidyverse)
+write_csv(data, "data.csv")
+```
+
+write_csv() is found in the readr package (part of tidyverse) and is an improved version of the base R function write.csv().
+
+Use the na argument to specify how NULL or NA values should be represented.
+
+## Write to excel
+
+```{r excel_write, eval=FALSE}
+library(openxlsx)
+write.xlsx(data, "data.xlsx", sheetName = "Summary")
+```
+
+The openxlsx enables data to be written to excel files.
+
+Use the asTable argument to specify if the data should be stored in a table within excel.
+
+See the write.xlsx documentation for various options to customise the workbook aesthetics from R.
